@@ -9,6 +9,12 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.Reader;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivityTAG_";
@@ -18,27 +24,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Gson json = new Gson();
+        //Gson json = new Gson();
 
-        Reader reader = new Reader() {
-            @Override
-            public int read(char[] chars, int i, int i1) throws IOException {
-                return 0;
-            }
+        try {
+            String response = run("https://randomuser.me/api");
 
-            @Override
-            public void close() throws IOException {
+            response.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            }
-        };
 
-        reader.read(json.exam3.json);
+        //reader.read(json.exam3.json);
 
-        json.fromJson(reader, null);
+        //json.fromJson(reader, null);
 
-        Log.d(TAG, "onCreate: " + json.toString() );
+        //Log.d(TAG, "onCreate: " + json.toString() );
 
 
 
+    }
+
+    OkHttpClient client = new OkHttpClient();
+
+    String run(String url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        return response.body().string();
     }
 }
